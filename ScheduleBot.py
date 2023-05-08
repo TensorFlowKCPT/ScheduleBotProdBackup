@@ -6,7 +6,7 @@ from sql import *
 #Ветка приватная, не ссыте оставлять ключ
 #Ключ от ScheduleBot: 6062185576:AAGwpqVz0K8Zg_i7hz-URE2USZcxazuGN-A
 #Ключ от тестового бота: 6026851226:AAFm4TvYE9QfIYSzx-hKiB3Mh_CtQ0KXrvY
-bot = telebot.TeleBot("6062185576:AAGwpqVz0K8Zg_i7hz-URE2USZcxazuGN-A")
+bot = telebot.TeleBot("6026851226:AAFm4TvYE9QfIYSzx-hKiB3Mh_CtQ0KXrvY")
 bot_id = bot.get_me().id
 
 @staticmethod
@@ -22,7 +22,7 @@ def GetDatesKeyboard():
     # Создаем клавиатуру
     keyboard = types.InlineKeyboardMarkup()
     # Создаем кнопки для нескольких дней
-    for i in range(0,7):
+    for i in range(1,7):
         date = (datetime.datetime.now()+datetime.timedelta(days=i)).strftime('%d.%m.20%y')
         button_day = types.InlineKeyboardButton(text=date, callback_data=date)
         keyboard.add(button_day)

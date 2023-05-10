@@ -148,7 +148,8 @@ def GetUrokTime(Date:datetime,UrokNumber:int):
                   9:"15:15-16:00",
                   10:"16:00-16:45",
                   11:"16:55-17:40",
-                  12:"17:40-18:25"}
+                  12:"17:40-18:25",
+                  13:"18:35-19:10"}
     SubbotaList = {1:"8:15-9:00",
                    2:"9:00-9:45",
                    3:"9:50-10:35",
@@ -160,7 +161,9 @@ def GetUrokTime(Date:datetime,UrokNumber:int):
                    9:"15:05-15:50",
                    10:"15:50-16:35",
                    11:"16:40-17:25",
-                   12:"17:25-18:10"}
+                   12:"17:25-18:10",
+                   13:"18:15-19:00"
+                   }
     if Date.strftime('%A')=='Saturday':
         return SubbotaList[int(UrokNumber)]
     else:

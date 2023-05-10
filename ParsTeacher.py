@@ -1,10 +1,19 @@
 import xlrd
+from ScheduleClass import *
+from UrokClass import *
 
-dt = "05.05.2023"
-FIO = "Полищук"
+def GetTeacherSchedule(DATE:str,FIO:str):
+    test = parsteacher(DATE,FIO)
+    uroki = []
+    for i in range(len(test['Номер'])):
+        urok = Urok(test['Номер'][i], test['Предмет'][i], test['Кабинет'][i], FIO)
+        uroki.append(urok)
+    date_format = '%d.%m.%Y'
+    Date = datetime.datetime.strptime(DATE, date_format)
+    return Schedule(Date,uroki)
 
-def parsteacher(date:str, FIO:str):
 
+def parsteacher(DATE:str, FIO:str):
     file = xlrd.open_workbook("ExcelAndWord/prepod.xls")
     # Получаем список листов в файле
     sheet_names = file.sheet_names()
@@ -15,7 +24,7 @@ def parsteacher(date:str, FIO:str):
     date = sheet.row_values(1)
     indxdate = None
     for i in range(len(date)):
-        if dt in date[i]:
+        if DATE in date[i]:
             indxdate = i
     
     #Нахождение индекса ФИО.
@@ -46,5 +55,6 @@ def parsteacher(date:str, FIO:str):
             test["Кабинет"].append('ничего')
     
     return test
-
-print(parsteacher(dt, FIO))
+#dt = "05.05.2023"
+#FIO = "Полищук"
+#print(parsteacher(dt, FIO))

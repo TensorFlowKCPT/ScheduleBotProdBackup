@@ -8,7 +8,7 @@ from UrokClass import Urok
 
 
 
-date =  "12.05.2023"
+date =  "10.05.2023"
 group = "ИСиП 21-11-3"
 
 
@@ -49,7 +49,7 @@ def GetExcelSchedule(lst:list, grp:str):
     prepod = ""
     kab = ""
     for i in lst[2:]:
-        if (type(i[0]) == int and flag) or (type(i[0]) == str and type(i[1]) == float and type(i[2]) == float) :
+        if (type(i[0]) == int and flag) or (type(i[0]) == str and type(i[1]) == float and type(i[2]) == float and flag) :
             flag = False
             arg["Урок"].append(namepara)
             arg["Кабинет"].append(kab)

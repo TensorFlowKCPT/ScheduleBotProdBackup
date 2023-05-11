@@ -8,8 +8,8 @@ from UrokClass import Urok
 
 
 
-date =  "10.05.2023"
-group = "ИСиП 21-11-1"
+date =  "12.05.2023"
+group = "ИСиП 21-11-3"
 
 
 def parstable(date:str, group:str):
@@ -48,8 +48,8 @@ def GetExcelSchedule(lst:list, grp:str):
     namepara = ""
     prepod = ""
     kab = ""
-    for i in lst[2:-1]:
-        if type(i[0]) == int and flag:
+    for i in lst[2:]:
+        if (type(i[0]) == int and flag) or (type(i[0]) == str and type(i[1]) == float and type(i[2]) == float) :
             flag = False
             arg["Урок"].append(namepara)
             arg["Кабинет"].append(kab)
@@ -76,13 +76,15 @@ def GetExcelSchedule(lst:list, grp:str):
     for i in range(len(arg["Урок"])):
         a = Urok(Name = arg["Урок"][i],Kabinet = arg["Кабинет"][i],Number = arg["№"][i],Prepod = arg["Преподаватель"][i])
         govnolist.append(a)
-    
     govno1 = Schedule(datetime.datetime.strptime(date, "%d.%m.%Y").date(), govnolist)
     return govno1
 
 
+for i in parstable(date, group):
+    print(i)
 
-# print(GetExcelSchedule(parstable(date, group), group))
+for i in GetExcelSchedule(parstable(date, group), group).Uroki:
+    print(i.Number, i.Name, i.Prepod, i.Kabinet)
 
 
 

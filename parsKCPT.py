@@ -78,6 +78,8 @@ def twotable(pathfile1: str, pathfile2: str):
     # Сохраняем объединенный Workbook в новый файл
     merged_workbook.save("ExcelAndWord/2table.xlsx")
 
+Download()
+
 
 
 

@@ -40,9 +40,9 @@ def GetMenuKeyboard(message):
     ScheduleButton = types.KeyboardButton(text="Расписание 📝")
     SettingsButton = types.KeyboardButton(text="⚙️")
     keyboard.add(ScheduleButton,SettingsButton)
-    if Database.is_user_prepod(message.chat.id):
-        PrepodPanelButton = types.KeyboardButton(text="Панель преподавателя 🎓")
-        keyboard.add(PrepodPanelButton)
+    #if Database.is_user_prepod(message.chat.id):
+    #    PrepodPanelButton = types.KeyboardButton(text="Панель преподавателя 🎓")
+    #    keyboard.add(PrepodPanelButton)
     return keyboard
 @staticmethod
 def GetDatesKeyboard():
@@ -98,7 +98,7 @@ def ChangeGroupBtn_Handler(message):
 #region Менюшки
 @staticmethod 
 def MainMenu(message):
-    bot.send_message(message.chat.id,text='Меню',reply_markup=GetMenuKeyboard(message))
+    bot.send_message(message.chat.id,text='Меню\nПо ошибкам писать\n@PikaChu72\n@Lardane\n@bymaginn',reply_markup=GetMenuKeyboard(message))
 def SettingsMenu(message):
     bot.send_message(message.chat.id,text='Настройки',reply_markup=GetSettingsKeyboard())
 #endregion

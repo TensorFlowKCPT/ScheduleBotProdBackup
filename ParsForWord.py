@@ -58,7 +58,7 @@ def GetWordSchedule(Data:str,group:str):
                     urok = Urok(Number=j, Name=result['Изменения'][i], Kabinet=result['Кабинет'][i], Prepod=result['Преподаватель'][i])
                     urok_list.append(urok)
             else:     
-                urok = Urok(Number=urok_number[0], Name=result['Изменения'][1], Kabinet=result['Кабинет'][i], Prepod=result['Преподаватель'][i])
+                urok = Urok(Number=urok_number[0], Name=result['Изменения'][i], Kabinet=result['Кабинет'][i], Prepod=result['Преподаватель'][i])
                 urok_list.append(urok)
         except:
             return [Schedule(Date, urok_list),True]
@@ -82,8 +82,7 @@ def preobrazovatel(lst:list):
             arg['Урок'].append([str(j) for j in range(start, end + 1)])
         elif len(matches) == 1:
             arg['Урок'].append([matches[0]])
-    #Выкидываем ненужное
-    lst[2] = []
+
     #Первичная обработка кабинетов
     for i in lst[4]:
           if(lst[4].index(i)%2!=0):
@@ -95,8 +94,6 @@ def preobrazovatel(lst:list):
            lst[3].remove('Будет')
     while 'Замена' in lst[3]:
            lst[3].remove('Замена')
-    while 'Замена кабинета' in lst[3]:
-           lst[3].remove('Замена кабинета')
     
     pat = r"\b([А-ЯЁ][а-яё]+)\s+([А-ЯЁ]\.[А-ЯЁ]\.)"
     pattern = regex.compile(pat)
@@ -110,7 +107,7 @@ def preobrazovatel(lst:list):
         lst[3].remove("")
     pat = r"Отмена"
     re = regex.compile(pat)
-
+    
     i = 0
     while i < len(lst[3]):
         if re.search(lst[3][i]):
@@ -130,24 +127,28 @@ def preobrazovatel(lst:list):
              arg['Кабинет'].append(i)
     #Конец(Надеюсь)
     for i in lst[3]:
-        try:
-            arg['Изменения'].append(i.split('*')[0])
-            arg['Преподаватель'].append(i.split('*')[1])
-        except:
-             if lst[3].index(i)%2==0:
-                arg['Изменения'].append(i)
-             else:
-                 arg['Преподаватель'].append(i)
+        if i == 'Замена кабинета':
+            arg['Изменения'].append('Замена кабинета')
+            arg['Преподаватель'].append('Замена кабинета')
+        else:
+            try:
+                arg['Изменения'].append(i.split('*')[0])
+                arg['Преподаватель'].append(i.split('*')[1])
+            except:
+                 if lst[3].index(i)%2==0:
+                    arg['Изменения'].append(i)
+                 else:
+                     arg['Преподаватель'].append(i)
     
     #Перевыкид на случай импосторов
     Budet = r'Будет'
-    Zamena = r'Замена'
+    Zamena = r'^Замена$'
     for key in ['Изменения', 'Преподаватель']:
         arg[key] = [line for line in arg[key] if not regex.search(f'{Budet}|{Zamena}', line)]
     return arg
 
-#parsresult = GetWordSchedule("11.05.2023","ДО 22-11-1")
-#if(len(parsresult[0].Uroki[0])>0):
+#parsresult = GetWordSchedule("12.05.2023","ИБАС 22-11")
+#if(len(parsresult[0].Uroki)>0):
 #    for i in parsresult[0].Uroki:
 #       print(i.Number, i.Name, i.Prepod, i.Kabinet)
 #else:

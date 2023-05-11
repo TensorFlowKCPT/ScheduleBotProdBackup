@@ -5,7 +5,7 @@ import parsKCPT
 
 
 print('Загрузка данных с сайта')
-parsKCPT.Download()
+#parsKCPT.Download()
 logging.basicConfig(level=logging.INFO, filename='app.log', filemode='w', format='%(asctime)s - %(levelname)s - %(message)s')
 logging.info('Старт бота')
 sql.Database.StartDatabase()

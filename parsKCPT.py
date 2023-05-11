@@ -86,4 +86,3 @@ def twotable(pathfile1: str, pathfile2: str):
 
 
 
-

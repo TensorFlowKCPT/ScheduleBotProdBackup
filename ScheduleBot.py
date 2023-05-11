@@ -35,20 +35,12 @@ def GetSettingsKeyboard():
     keyboard.add(ScheduleButton,BackButton)
     return keyboard
 @staticmethod
-def GetFreePrepodsKeyboard():
-    keyboard = types.ReplyKeyboardMarkup(resize_keyboard=False)
-    
-    for i in Database.GetFreePrepods():
-        Button = types.KeyboardButton(text=i[0])
-        keyboard.add(Button)
-    return keyboard
-@staticmethod
 def GetMenuKeyboard(message):
     keyboard = types.ReplyKeyboardMarkup(resize_keyboard=True, row_width=3)
     ScheduleButton = types.KeyboardButton(text="Расписание 📝")
     SettingsButton = types.KeyboardButton(text="⚙️")
     keyboard.add(ScheduleButton,SettingsButton)
-    if Database.is_user_activeprepod(message.chat.id)[0]:
+    if Database.is_user_prepod(message.chat.id):
         PrepodPanelButton = types.KeyboardButton(text="Панель преподавателя 🎓")
         keyboard.add(PrepodPanelButton)
     return keyboard
@@ -62,23 +54,10 @@ def GetDatesKeyboard():
         button_day = types.InlineKeyboardButton(text=date, callback_data=date)
         keyboard.add(button_day)
     return keyboard
-@staticmethod
-def GetPrepodDatesKeyboard(FIO):
-    # Создаем клавиатуру
-    keyboard = types.InlineKeyboardMarkup()
-    # Создаем кнопки для нескольких дней
-    date = datetime.datetime.now().strftime('%d.%m.20%y')
-    button_day = types.InlineKeyboardButton(text='Сегодня', callback_data=date+'*'+FIO)
-    keyboard.add(button_day)
-    for i in range(1,7):
-        date = (datetime.datetime.now()+datetime.timedelta(days=i)).strftime('%d.%m.20%y')
-        button_day = types.InlineKeyboardButton(text=date, callback_data=date+'*'+FIO)
-        keyboard.add(button_day)
-    return keyboard
 #endregion
 #region Панель преподавателей
 @bot.message_handler(regexp='Панель преподавателя 🎓')
-def DeletePrepod(message):
+def PrepodPanelButton_Handler(message):
     PrepodPanel(message)
 @bot.message_handler(regexp='Я не преподаватель❌')
 def DeletePrepod(message):
@@ -86,27 +65,17 @@ def DeletePrepod(message):
     MainMenu(message)
 @staticmethod
 def PrepodPanel(message):
-    response = Database.is_user_activeprepod(message.chat.id)
-    print(response)
-    if response[0]:
-        FIO = Database.GetPrepodById(response[1])
-        bot.send_message(message.chat.id,text='Здравствуйте '+FIO,reply_markup=GetPrepodsKeyboard())
-    else:
-        bot.send_message(message.chat.id,text='Вы не зарегестрированы как преподаватель, выберите свое ФИО',reply_markup=GetFreePrepodsKeyboard())
+        bot.send_message(message.chat.id,text='Здравствуйте, почти все функции преподавателей временно вырезаны',reply_markup=GetPrepodsKeyboard())
 @bot.message_handler(regexp='Посмотреть мое расписание🗒️')
 def GetPrepodsSchedule(message):
-    FIO = Database.GetPrepodById(message.chat.id)
-    bot.send_message(message.chat.id,text='Выберите дату на которое вам нужно получить расписание',reply_markup=GetPrepodDatesKeyboard(FIO))
+    bot.send_message(message.chat.id,text='Эта функция временно вырезана')
 
-@bot.message_handler(regexp='^[А-ЯЁ][а-яё]*(?:[\s-][А-ЯЁ][а-яё]*)*(?: [А-ЯЁ]\.(?:[А-ЯЁ]\.?)?)?$')
-def RegPrepod(message):
-    Database.RegPrepod(message.chat.id,message.text)
-    PrepodPanel(message)
 
 @bot.message_handler(commands=['pr'])
 def PrepodPassword(message):
     password = message.text.split(' ')[1]
-    if password == '123456':
+    if password == 'KCPTPREPOD':
+        Database.RegPrepod(message.chat.id)
         PrepodPanel(message)
     else:
         bot.send_message(message.chat.id, text='Неверный пароль')

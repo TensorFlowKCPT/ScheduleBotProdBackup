@@ -71,7 +71,7 @@ def GetDaySchedule(Group:str, Data:str):
     if cache_key in cache:
         cached_schedule, cached_time = cache[cache_key]
         time_since_last_update = datetime.datetime.now() - cached_time
-        if time_since_last_update < datetime.timedelta(hours=12):
+        if time_since_last_update < datetime.timedelta(hours=3):
             return [cached_schedule,False]
 
     FinalSchedule = Schedule(Date, [])
@@ -87,11 +87,14 @@ def GetDaySchedule(Group:str, Data:str):
 
     # Пройти по урокам из Word расписания и добавить их в список final_uroki
     for urok_data in word_schedule:
-        urok = Urok(Number=urok_data.Number, Name=urok_data.Name, Kabinet=urok_data.Kabinet, Prepod=urok_data.Prepod)
-        urok_date = word_result[0].Date
+        urok = Urok(Number=int(urok_data.Number), Name=urok_data.Name, Kabinet=urok_data.Kabinet, Prepod=urok_data.Prepod)
+        
         urok_exists = False
         for i, final_urok in enumerate(final_uroki):
-            if final_urok.Number == urok.Number:
+            if int(final_urok.Number) == int(urok.Number):
+                if urok.Name == 'Замена кабинета':
+                    urok.Name = final_uroki[i].Name
+                    urok.Prepod = final_uroki[i].Prepod
                 final_uroki[i] = urok
                 urok_exists = True
         if not urok_exists:

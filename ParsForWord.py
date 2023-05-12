@@ -147,9 +147,9 @@ def preobrazovatel(lst:list):
         arg[key] = [line for line in arg[key] if not regex.search(f'{Budet}|{Zamena}', line)]
     return arg
 
-#parsresult = GetWordSchedule("12.05.2023","ИБАС 22-11")
-#if(len(parsresult[0].Uroki)>0):
-#    for i in parsresult[0].Uroki:
-#       print(i.Number, i.Name, i.Prepod, i.Kabinet)
-#else:
-#    print("Изменений нет")
+parsresult = GetWordSchedule("12.05.2023","ИСиП 22-11-1")
+if(len(parsresult[0].Uroki)>0):
+   for i in parsresult[0].Uroki:
+      print(i.Number, i.Name, i.Prepod, i.Kabinet)
+else:
+   print("Изменений нет")

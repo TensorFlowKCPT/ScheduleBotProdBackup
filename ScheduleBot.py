@@ -7,7 +7,8 @@ import ParsTeacher
 #Ветка приватная, не ссыте оставлять ключ
 #Ключ от ScheduleBot: 6062185576:AAGwpqVz0K8Zg_i7hz-URE2USZcxazuGN-A
 #Ключ от тестового бота: 6026851226:AAFm4TvYE9QfIYSzx-hKiB3Mh_CtQ0KXrvY
-bot = telebot.TeleBot("6026851226:AAFm4TvYE9QfIYSzx-hKiB3Mh_CtQ0KXrvY")
+#Ключ от нашего бота: 6116104389:AAHcK-4uNVt3Tmgan2MQ0D0UBC78VTtZ6wg
+bot = telebot.TeleBot("6116104389:AAHcK-4uNVt3Tmgan2MQ0D0UBC78VTtZ6wg")
 bot_id = bot.get_me().id
 #region Клавиатуры
 def GetPrepodsKeyboard():

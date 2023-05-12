@@ -48,6 +48,7 @@ def GetWordSchedule(Data:str,group:str):
             Urokq = []
             return[Schedule(Date, Urokq),True]
     urok_list = []
+
     urokspat = regex.compile(r"\d+-\d+")
     for i, urok_info in enumerate(result['Урок']):
         try:
@@ -55,10 +56,20 @@ def GetWordSchedule(Data:str,group:str):
             if regex.match(urokspat,urok_number):
                 start, end = urok_number.split('-')
                 for j in range(int(start), int(end) + 1):
-                    urok = Urok(Number=j, Name=result['Изменения'][i], Kabinet=result['Кабинет'][i], Prepod=result['Преподаватель'][i])
+                    
+                    urok = Urok(Number=j, Name=result['Изменения'][i], Kabinet='', Prepod=result['Преподаватель'][i])
+                    try: 
+                        urok.Kabinet = result['Кабинет'][i]
+                    except IndexError:
+                        urok.Kabinet = urok_list[-1].Kabinet
+
                     urok_list.append(urok)
             else:     
-                urok = Urok(Number=urok_number[0], Name=result['Изменения'][i], Kabinet=result['Кабинет'][i], Prepod=result['Преподаватель'][i])
+                urok = Urok(Number=urok_number[0], Name=result['Изменения'][i], Kabinet='', Prepod=result['Преподаватель'][i])
+                try: 
+                    urok.Kabinet = result['Кабинет'][i]
+                except IndexError:
+                    urok.Kabinet = urok_list[-1].Kabinet
                 urok_list.append(urok)
         except:
             return [Schedule(Date, urok_list),True]
@@ -84,8 +95,9 @@ def preobrazovatel(lst:list):
             arg['Урок'].append([matches[0]])
 
     #Первичная обработка кабинетов
+    
     for i in lst[4]:
-          if(lst[4].index(i)%2!=0):
+          if i==' ' or i=='':
             lst[4].remove(i)
     #Обработка Названия и преподов
     while ' ' in lst[3]:
@@ -116,17 +128,18 @@ def preobrazovatel(lst:list):
             lst[4].pop(i)
         else:
             i += 1
-                
     #Вторичная обработка кабинетов и их внос
-    
     pat2 = r"\d"
     for i in lst[4]:
         if regex.match(pat2,i.strip()):
-            arg['Кабинет'].append(int(i))
-        elif i.strip()==('с/з'):
+            arg['Кабинет'].append(int(i.strip()))
+        elif i.strip()==('с/з') or i.strip()==('ч/з'):
              arg['Кабинет'].append(i)
+    
     #Конец(Надеюсь)
     for i in lst[3]:
+        if 'Переносится' in i:
+            arg['Урок'].pop(lst[3].index(i))
         if i == 'Замена кабинета':
             arg['Изменения'].append('Замена кабинета')
             arg['Преподаватель'].append('Замена кабинета')
@@ -145,6 +158,11 @@ def preobrazovatel(lst:list):
     Zamena = r'^Замена$'
     for key in ['Изменения', 'Преподаватель']:
         arg[key] = [line for line in arg[key] if not regex.search(f'{Budet}|{Zamena}', line)]
+    temp_ = []
+    for i in arg['Изменения']:
+        if not 'Переносится' in i:
+            temp_.append(i)
+    arg['Изменения'] = temp_
     return arg
 
 parsresult = GetWordSchedule("12.05.2023","ИСиП 22-11-1")
